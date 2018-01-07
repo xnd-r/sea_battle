@@ -9,68 +9,85 @@
   body { padding-top:50px; }
   </style>
 </head>
+
 <body class="container">
-  
   <div class="jumbotron text-center">
     <h1>Greetings, Traveller!</h1>
   </div>
-      <p class="text-center">
-       <button id = butt style="vertical-align: middle; width: 200px; height: 70px; font-size: 20px;"> </button>
-      </p>
+    <p class="text-center">
+      <button id = butt 
+        style="vertical-align: middle; width: 200px; height: 70px; font-size: 20px;">   
+      </button>
+    </p>
+
   <footer>
     <p class="text-center text-muted">
       Copyright &copy; 2017 &middot; _sea_battle_
     </p>
   </footer>
+
+
   <script> 
-function reqListener(event) { 
-var data = JSON.parse(this.responseText); 
-var button = document.getElementById("butt"); 
-if (data.user == 'user1'){ 
-button.innerHTML = "New Game"; 
-} 
-if (data.user == 'user2'){ 
-button.innerHTML = "Join Game"; 
-} 
-button.onclick = function(e) { 
-if (data.user == 'user1') { 
-var Data = new Date(); 
-var object = {firstjoined: Data.getFullYear()}; 
-var oReq = new XMLHttpRequest(); 
-oReq.open("POST", '/firstjoined'); 
-oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-oReq.send(JSON.stringify(object)); 
-function reqListener1(event) { 
-document.write(this.responseText); 
-} 
-var oReq = new XMLHttpRequest(); 
-oReq.addEventListener("load", reqListener1); 
-oReq.open("GET", '/battlefield1'); 
-oReq.send(); 
 
-} 
-if (data.user == 'user2'){ 
-var Data = new Date(); 
-var object = {secondjoined: Data.getFullYear()}; 
-var oReq = new XMLHttpRequest(); 
-oReq.open("POST", '/secondjoined'); 
-oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-oReq.send(JSON.stringify(object)); 
-function reqListener1(event) { 
-document.write(this.responseText); 
-} 
-var oReq = new XMLHttpRequest(); 
-oReq.addEventListener("load", reqListener1); 
-oReq.open("GET", '/battlefield2'); 
-oReq.send(); 
-} 
-}; 
-} 
-var oReq = new XMLHttpRequest(); 
-oReq.addEventListener("load", reqListener); 
-oReq.open("GET", '/user'); oReq.send(); 
+    function reqListener(event) { 
+      var data = JSON.parse(this.responseText); 
+      var button = document.getElementById("butt"); 
 
-</script>
+      if (data.user == 'user1'){ 
+        button.innerHTML = "New Game"; 
+      } 
+      if (data.user == 'user2'){ 
+        button.innerHTML = "Join Game"; 
+      } 
+
+      button.onclick = function(e) { 
+        if (data.user == 'user1') { 
+          var Data = new Date(); 
+          var object = {firstjoined: Data.getFullYear()}; 
+          var oReq = new XMLHttpRequest(); 
+
+          oReq.open("POST", '/firstjoined'); 
+          oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+          oReq.send(JSON.stringify(object)); 
+
+          function reqListener1(event) { 
+            document.write(this.responseText); 
+          }
+
+          var oReq = new XMLHttpRequest(); 
+
+          oReq.addEventListener("load", reqListener1); 
+          oReq.open("GET", '/battlefield1'); 
+          oReq.send(); 
+        } 
+        if (data.user == 'user2'){ 
+          var Data = new Date(); 
+          var object = {secondjoined: Data.getFullYear()}; 
+          var oReq = new XMLHttpRequest(); 
+
+          oReq.open("POST", '/secondjoined'); 
+          oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+          oReq.send(JSON.stringify(object)); 
+
+          function reqListener1(event) { 
+            document.write(this.responseText); 
+          } 
+
+          var oReq = new XMLHttpRequest(); 
+
+          oReq.addEventListener("load", reqListener1); 
+          oReq.open("GET", '/battlefield2'); 
+          oReq.send(); 
+        } 
+      }; 
+    } 
+
+    var oReq = new XMLHttpRequest(); 
+    oReq.addEventListener("load", reqListener); 
+    oReq.open("GET", '/user'); oReq.send(); 
+
+  </script>
   
+
 </body>
 </html>
