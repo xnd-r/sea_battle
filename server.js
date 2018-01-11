@@ -134,15 +134,15 @@ app.get('/getships2', function(req, res) {
 });
 
 app.post('/1stsended', jsonParser, function (req, res) { 
-  if(!req.body) 
-    return res.sendStatus(400); 
-  ships2.end(req);
-});
+if(!req.body) 
+return res.sendStatus(400); 
+ships2.end(JSON.stringify(req.body)); 
+}); 
 
 app.post('/2ndsended', jsonParser, function (req, res) { 
-  if(!req.body) 
-    return res.sendStatus(400); 
-  ships1.end(req);
+if(!req.body) 
+return res.sendStatus(400); 
+ships1.end(JSON.stringify(req.body)); 
 });
 
 app.listen(8080); 
