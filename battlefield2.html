@@ -46,19 +46,11 @@
   </p>   
 
   <script>  
-
+     
     window.onload = function(w, h) {
-      var p1map = ['ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo',
-                  'ossoooosoo'],
-          p2map = [],
+      var p1map = [],
+      p2map = [];
+        var
           p1 = document.getElementById('battle-field-1'),
           p2 = document.getElementById('battle-field-2'),
           outputDiv = document.getElementById("output"),
@@ -69,8 +61,6 @@
         for (var a = 0; a < w; a++) {
           var shipLine = prompt("Enter " + a + " line of your ships, where 'o' is an empty cell and 's' is a cell with the ship", "ossoooosoo");
           p2map.push(shipLine);
-          // if (p2map[a] != undefined) {       
-          // }
         }
         
         for (i = 0; i < w; i++) for (j = 0; j < h; j++) {
@@ -85,10 +75,6 @@
             div2.className = 'w';
           }
           p2.appendChild(div2);
-          // div1 = document.createElement('div');
-          // div1.className = p1map[i][j] == 's' ? 's' : 'w';
-          // div1.onclick = function () { if (fire(this)) backfire(); };
-          // p1.appendChild(div1);
         }
       };
 
@@ -106,50 +92,38 @@
       }
     }(10, 10);
 
-    function reqListener1(){
-      alert(this.responseText);
-      var data = JSON.parse(this.responseText);   
-      //rework
+    var oReq = new XMLHttpRequest(); 
+    oReq.addEventListener("load", reqListener1); 
+    oReq.open("GET", '/getships2'); 
+    oReq.send(); 
+
+    function reqListener1(event){
+      var data = JSON.parse(this.responseText); 
+      //console.log(data);
+      alert(data);
       for (i = 0; i < w; i++) for (j = 0; j < h; j++) {
-        div2 = document.createElement('div');
-        div2.id = i+'_'+j;
-        div2.className = data[i][j];
+        div1 = document.createElement('div');
+        div1.id = i+'_'+j;
+        div1.className = data[i][j];
 
         if (data[i][j] == 's') {
-          div2.className = 's';
-        } else {
-          div2.className = 'w';
+          div1.className = 's';
+        } 
+        else {
+          div1.className = 'w';
         }
-        p2.appendChild(div2);
-        div1 = document.createElement('div');
-        div1.className = data[i][j] == 's' ? 's' : 'w';
-        div1.onclick = function () { if (fire(this)) backfire(); };
         p1.appendChild(div1);
-      }
+    }
     };
 
-    var oReq = new XMLHttpRequest(); 
-    oReq.addEventListener("load", reqListener1); 
-    oReq.open("GET", '/getships2'); 
-    oReq.send(); 
-
-    var oReq = new XMLHttpRequest(); 
-    oReq.addEventListener("load", reqListener1); 
-    oReq.open("GET", '/getships2'); 
-    oReq.send(); 
-
-    var red1 = document.getElementById("ready2");
-    red1.onclick = function(e){
-      //alert(JSON.stringify(p2map));
-      // var object;
-      // for(var i=0; i < p2map.length; ++i){
-      //   object['field'+i]=p2map[i];
-      // }
-      // alert(object['field0']);
+    var red2 = document.getElementById("ready2");
+    red2.onclick = function(e){
+      console.log("bat2alive");
+      console.log(JSON.stringify(p2map));
       var oReq = new XMLHttpRequest(); 
       oReq.open("POST", '/2ndsended'); 
       oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-      oReq.send(JSON.stringify(object)); 
+      oReq.send(JSON.stringify(p2map)); 
     };
   </script>
 
