@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var SessionStore = require('express-mysql-session');
 app.use(cookieParser());
+//var socket = new WebSocket("ws://localhost:8080");
 
 var connection = db.createConnection({
     host:"127.0.0.1", user:"root",
@@ -144,6 +145,29 @@ if(!req.body)
 return res.sendStatus(400); 
 ships1.end(JSON.stringify(req.body)); 
 });
+
+var fire1, fire2;
+
+app.get('/getfire1', function(req, res) { 
+  fire1 = res;
+});
+
+app.get('/getfire2', function(req, res) { 
+  fire2 = res;
+});
+
+app.post('/1stfired', jsonParser, function (req, res) { 
+  if(!req.body) 
+  return res.sendStatus(400); 
+  fire2.end(JSON.stringify(req.body)); 
+  }); 
+  
+  app.post('/2ndfired', jsonParser, function (req, res) { 
+  if(!req.body) 
+  return res.sendStatus(400); 
+  fire1.end(JSON.stringify(req.body)); 
+  });
+
 
 app.listen(8080); 
 console.log('Server started up');
