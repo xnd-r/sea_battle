@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>_Sea_Battle_</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <style>
   body { padding-top:50px; }
@@ -50,7 +49,6 @@
             outputDiv = document.getElementById("output"),
             button = document.getElementById('start');
             begin = document.getElementById('begin1');
-
         button.onclick = function () {
           button.disabled = true;
           for (var a = 0; a < w; a++) {
@@ -60,7 +58,7 @@
     
           for (i = 0; i < w; i++) for (j = 0; j < h; j++) {
             var div1 = document.createElement('div');
-            div1.id = i+'_'+j;
+            div1.id = '1_'+i+'_'+j;
             div1.className = p1map[i][j];
             if (p1map[i][j] == 's') {
               div1.className = 's';
@@ -71,25 +69,14 @@
           }
         };
         
-       // function fire(el) {
-            // if (el.className == 'd' || el.className == 'm') return false;
-            // el.className = el.className == 's' ? 'd' : 'm';
-            // if (document.querySelectorAll('#battle-field-2 .s').length === 0) {
-            //   alert('Victory!'); 
-            //   return false;
-            // }
-            // if (el.className == 'm') return true;
-          //}
-
          function reqListener1(){
            var data = JSON.parse(this.responseText);
-           alert(this.responseText);  
+           //alert(this.responseText);  
            var 
-            //p1 = document.getElementById('battle-field-1'),
             p2 = document.getElementById('battle-field-2');
            for (i = 0; i < w; i++) for (j = 0; j < h; j++) {
             var div2 = document.createElement('div');
-            div2.id = i+'_'+j;
+            div2.id = '2_'+i+'_'+j;
             div2.className = data[i][j];
             if (data[i][j] == 's') {
               div2.className = 's';
@@ -108,55 +95,57 @@
         var red1 = document.getElementById("ready1");
         
         red1.onclick = function(e){
-          alert(JSON.stringify(p1map));
+          //alert(JSON.stringify(p1map));
           var oReq = new XMLHttpRequest(); 
           oReq.open("POST", '/1stsended'); 
           oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
           oReq.send(JSON.stringify(p1map)); 
         };
-
-        var data = [];
         p2.onclick = function(e){
           e.target.className = e.target.className == 's' ? 'd' : 'm';
             if (document.querySelectorAll('#battle-field-2 .s').length === 0){
-              alert('1st player Wins!'); 
+              var date = new Date();
+              var object = {finishtime:date, winner:'first'};
+              var oReq = new XMLHttpRequest(); 
+              oReq.open("POST", '/finish'); 
+              oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+              oReq.send(JSON.stringify(object));
+              //alert('1st player Wins!'); 
             }
             var tmp = e.target.id.split('_');
-            var i = tmp[0];
-            var j = tmp[1];
-            data[0] = i;
-            data[1] = j;
-            alert(data);
-
+            var data=[];
+            data[0]=tmp[1];
+            data[1] = tmp[2];
+            //alert(data);
             var oReq = new XMLHttpRequest(); 
             oReq.open("POST", '/1stfired'); 
             oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-            oReq.send(JSON.stringify(data));       
-                                                                                                                                                                                
-        } 
-
-
+            oReq.send(JSON.stringify(data));
+          } 
         function reqListener2(){
           var el = JSON.parse(this.responseText); 
-          alert(this.responseText);  
-          var id = el[0]+'_'+el[1];
-          var div1 = getElementById(id);
+          //alert(this.responseText);  
+          var id = '1_'+el[0]+'_'+el[1];
+          var div1 = document.getElementById(id);
           div1.className = div1.className == 's' ? 'd' : 'm';
+          if (document.querySelectorAll('#battle-field-1 .s').length === 0){
+              var date = new Date();
+              var object = {finishtime:date, winner:'second'};
+              var oReq = new XMLHttpRequest(); 
+              oReq.open("POST", '/finish'); 
+              oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+              oReq.send(JSON.stringify(object));
+              //alert('2nd player Wins!'); 
+            }
+          var oReq2 = new XMLHttpRequest(); 
+          oReq2.addEventListener("load", reqListener2); 
+          oReq2.open("GET", '/getfire1'); 
+          oReq2.send(); 
         }
-
          var oReq2 = new XMLHttpRequest(); 
          oReq2.addEventListener("load", reqListener2); 
          oReq2.open("GET", '/getfire1'); 
          oReq2.send(); 
-        // var cell_1;// = get element with index of div from string 92
-        // cell_1.onclick = function(e){
-        //   alert(JSON.stringify(cell_1));
-        //   var oReq = new XMLHttpRequest(); 
-        //   oReq.open("POST", '/1stfired'); 
-        //   oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-        //   oReq.send(JSON.stringify(cell_1)); 
-        // };
-
       }(10, 10);
       </script>
 

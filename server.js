@@ -8,7 +8,6 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var SessionStore = require('express-mysql-session');
 app.use(cookieParser());
-//var socket = new WebSocket("ws://localhost:8080");
 
 var connection = db.createConnection({
     host:"127.0.0.1", user:"root",
@@ -98,13 +97,11 @@ app.post('/secondjoined', jsonParser, function (req, res) {
       {console.log(err);
         return;
     } 
-    var games = JSON.stringify(rows); 
-    var data = JSON.parse(games); 
     var idgames = 0; 
-    if (data.length > 0){ 
-      for (var i =0; i<data.length;i++ ){ 
-        if (data[i].idgames > idgames) 
-          idgames = data[i].idgames; 
+    if (rows.length > 0){ 
+      for (var i =0; i<rows.length;i++ ){ 
+        if (rows[i].idgames > idgames) 
+          idgames = rows[i].idgames; 
       } 
     }
     connection.query("update games set 2nd_join=? where idgames=?", [req.body.secondjoined, idgames], function(err, rows){ 
@@ -135,17 +132,16 @@ app.get('/getships2', function(req, res) {
 });
 
 app.post('/1stsended', jsonParser, function (req, res) { 
-if(!req.body) 
-return res.sendStatus(400); 
-ships2.end(JSON.stringify(req.body)); 
-}); 
-
-app.post('/2ndsended', jsonParser, function (req, res) { 
-if(!req.body) 
-return res.sendStatus(400); 
-ships1.end(JSON.stringify(req.body)); 
+  if(!req.body) 
+    return res.sendStatus(400); 
+  ships2.end(JSON.stringify(req.body));
 });
 
+app.post('/2ndsended', jsonParser, function (req, res) { 
+  if(!req.body) 
+    return res.sendStatus(400); 
+    ships1.end(JSON.stringify(req.body));
+});
 var fire1, fire2;
 
 app.get('/getfire1', function(req, res) { 
@@ -167,7 +163,29 @@ app.post('/1stfired', jsonParser, function (req, res) {
   return res.sendStatus(400); 
   fire1.end(JSON.stringify(req.body)); 
   });
-
-
+  app.post('/finish', jsonParser, function (req, res) { 
+    if(!req.body) 
+      return res.sendStatus(400); 
+    connection.query("select * from games", 
+    function(err, rows){ 
+      if (err)
+        {console.log(err);
+          return;
+      } 
+      var idgames = 0; 
+      if (rows.length > 0){ 
+        for (var i =0; i<rows.length;i++ ){ 
+          if (rows[i].idgames > idgames) 
+            idgames = rows[i].idgames; 
+        } 
+      }
+      connection.query("update games set finishtime=?, winner=? where idgames=?", [req.body.finishtime,req.body.winner, idgames], function(err, rows){ 
+      if (err){ 
+        console.log(err); 
+        return; 
+      } 
+      }); 
+    }); 
+  }); 
 app.listen(8080); 
 console.log('Server started up');
