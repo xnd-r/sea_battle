@@ -114,29 +114,48 @@
           oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
           oReq.send(JSON.stringify(p1map)); 
         };
-        
-        function reqListener2(){
-          var el = JSON.parse(this.responseText); // I guess it could be persed from json to div
-           //alert(this.responseText);  
-            el.className = el.className == 's' ? 'd' : 'm';
+
+        var data = [];
+        p2.onclick = function(e){
+          e.target.className = e.target.className == 's' ? 'd' : 'm';
             if (document.querySelectorAll('#battle-field-2 .s').length === 0){
               alert('1st player Wins!'); 
-              //send time to database;
             }
+            var tmp = e.target.id.split('_');
+            var i = tmp[0];
+            var j = tmp[1];
+            data[0] = i;
+            data[1] = j;
+            alert(data);
+
+            var oReq = new XMLHttpRequest(); 
+            oReq.open("POST", '/1stfired'); 
+            oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+            oReq.send(JSON.stringify(data));       
+                                                                                                                                                                                
+        } 
+
+
+        function reqListener2(){
+          var el = JSON.parse(this.responseText); 
+          alert(this.responseText);  
+          var id = el[0]+'_'+el[1];
+          var div1 = getElementById(id);
+          div1.className = div1.className == 's' ? 'd' : 'm';
         }
 
-        var oReq2 = new XMLHttpRequest(); 
-        oReq2.addEventListener("click", reqListener2); 
-        oReq2.open("GET", '/getfire1'); 
-        oReq2.send(); 
-        var cell_1;// = get element with index of div from string 92
-        cell_1.onclick = function(e){
-          alert(JSON.stringify(cell_1));
-          var oReq = new XMLHttpRequest(); 
-          oReq.open("POST", '/1stfired'); 
-          oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
-          oReq.send(JSON.stringify(cell_1)); 
-        };
+         var oReq2 = new XMLHttpRequest(); 
+         oReq2.addEventListener("load", reqListener2); 
+         oReq2.open("GET", '/getfire1'); 
+         oReq2.send(); 
+        // var cell_1;// = get element with index of div from string 92
+        // cell_1.onclick = function(e){
+        //   alert(JSON.stringify(cell_1));
+        //   var oReq = new XMLHttpRequest(); 
+        //   oReq.open("POST", '/1stfired'); 
+        //   oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+        //   oReq.send(JSON.stringify(cell_1)); 
+        // };
 
       }(10, 10);
       </script>
