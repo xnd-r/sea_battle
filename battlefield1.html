@@ -35,7 +35,7 @@
       </p>
 
       <p id = "ready" class="text-center">
-        <button id = ready1 style="vertical-align: middle; width: 200px; height: 70px; font-size: 20px;"
+        <button id = "ready1" style="vertical-align: middle; width: 200px; height: 70px; font-size: 20px;"
         >READY</button>
       </p>  
 
@@ -71,21 +71,21 @@
           }
         };
         
-        function fire(el) {
-            if (el.className == 'd' || el.className == 'm') return false;
-            el.className = el.className == 's' ? 'd' : 'm';
-            if (document.querySelectorAll('#battle-field-2 .s').length === 0) {
-              alert('Victory!'); 
-              return false;
-            }
-            if (el.className == 'm') return true;
-          }
+       // function fire(el) {
+            // if (el.className == 'd' || el.className == 'm') return false;
+            // el.className = el.className == 's' ? 'd' : 'm';
+            // if (document.querySelectorAll('#battle-field-2 .s').length === 0) {
+            //   alert('Victory!'); 
+            //   return false;
+            // }
+            // if (el.className == 'm') return true;
+          //}
 
          function reqListener1(){
            var data = JSON.parse(this.responseText);
            alert(this.responseText);  
            var 
-            p1 = document.getElementById('battle-field-1'),
+            //p1 = document.getElementById('battle-field-1'),
             p2 = document.getElementById('battle-field-2');
            for (i = 0; i < w; i++) for (j = 0; j < h; j++) {
             var div2 = document.createElement('div');
@@ -97,7 +97,7 @@
             else {
               div2.className = 'w';
             }
-            p2.appendChild(div2);
+            p2.appendChild(div2); 
           }
         }
         
@@ -116,10 +116,28 @@
         };
         
         function reqListener2(){
-          var data = JSON.parse(this.responseText);
-           alert(this.responseText);  
-           
+          var el = JSON.parse(this.responseText); // I guess it could be persed from json to div
+           //alert(this.responseText);  
+            el.className = el.className == 's' ? 'd' : 'm';
+            if (document.querySelectorAll('#battle-field-2 .s').length === 0){
+              alert('1st player Wins!'); 
+              //send time to database;
+            }
         }
+
+        var oReq2 = new XMLHttpRequest(); 
+        oReq2.addEventListener("click", reqListener2); 
+        oReq2.open("GET", '/getfire1'); 
+        oReq2.send(); 
+        var cell_1;// = get element with index of div from string 92
+        cell_1.onclick = function(e){
+          alert(JSON.stringify(cell_1));
+          var oReq = new XMLHttpRequest(); 
+          oReq.open("POST", '/1stfired'); 
+          oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
+          oReq.send(JSON.stringify(cell_1)); 
+        };
+
       }(10, 10);
       </script>
 
