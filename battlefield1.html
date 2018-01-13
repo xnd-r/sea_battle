@@ -41,14 +41,13 @@
        <script>  
        var p1map = []; 
        p2map = [];
-      window.onload = function(w, h) {
-   
+      window.onload = function(w, h) {   
         var 
             p1 = document.getElementById('battle-field-1'),
             p2 = document.getElementById('battle-field-2'),
-            outputDiv = document.getElementById("output"),
+            //outputDiv = document.getElementById("output"),
             button = document.getElementById('start');
-            begin = document.getElementById('begin1');
+            //begin = document.getElementById('begin1');
         button.onclick = function () {
           button.disabled = true;
           for (var a = 0; a < w; a++) {
@@ -101,6 +100,7 @@
           oReq.setRequestHeader('Content-type', 'application/json', 'charset=utf-8'); 
           oReq.send(JSON.stringify(p1map)); 
         };
+
         p2.onclick = function(e){
           e.target.className = e.target.className == 's' ? 'd' : 'm';
             if (document.querySelectorAll('#battle-field-2 .s').length === 0){
@@ -139,7 +139,7 @@
             }
           var oReq2 = new XMLHttpRequest(); 
           oReq2.addEventListener("load", reqListener2); 
-          oReq2.open("GET", '/getfire1'); 
+          oReq2.open("GEdT", '/getfire1'); 
           oReq2.send(); 
         }
          var oReq2 = new XMLHttpRequest(); 

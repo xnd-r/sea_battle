@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>_Sea_Battle_</title>
-  <!-- CSS -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <style>
   body { padding-top:50px; }
@@ -22,10 +21,9 @@
 
   <footer>
     <p class="text-center text-muted">
-      Copyright &copy; 2017 &middot; _sea_battle_
+      Copyright &copy; 2017-2018 &middot; _k_ras_ &amp; _xndr 
     </p>
   </footer>
-
 
   <script> 
     function reqListener(event) { 
@@ -37,6 +35,7 @@
       if (data.user == 'user2'){ 
         button.innerHTML = "Join Game"; 
       } 
+
       button.onclick = function(e) { 
         if (data.user == 'user1') { 
           var Data = new Date(); 
@@ -53,6 +52,7 @@
           oReq.open("GET", '/battlefield1'); 
           oReq.send(); 
         } 
+
         if (data.user == 'user2'){ 
           var Data = new Date(); 
           var object = {secondjoined: Data}; 

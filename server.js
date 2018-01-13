@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var bodyParser = require("body-parser");
+var bodyParser = require("body-parser"); //handling post
 var db = require("mysql");
 var jsonParser = bodyParser.json();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +19,7 @@ connection.connect(function(err){
        console.log(err); 
        return;
     }
-    console.log("connection established");
+    console.log("db connection established");
   });
 
 var options = {
@@ -156,36 +156,38 @@ app.post('/1stfired', jsonParser, function (req, res) {
   if(!req.body) 
   return res.sendStatus(400); 
   fire2.end(JSON.stringify(req.body)); 
-  }); 
+}); 
   
-  app.post('/2ndfired', jsonParser, function (req, res) { 
+app.post('/2ndfired', jsonParser, function (req, res) { 
   if(!req.body) 
   return res.sendStatus(400); 
   fire1.end(JSON.stringify(req.body)); 
-  });
-  app.post('/finish', jsonParser, function (req, res) { 
-    if(!req.body) 
-      return res.sendStatus(400); 
-    connection.query("select * from games", 
-    function(err, rows){ 
-      if (err)
-        {console.log(err);
-          return;
+});
+
+app.post('/finish', jsonParser, function (req, res) { 
+  if(!req.body) 
+    return res.sendStatus(400); 
+  connection.query("select * from games", 
+  function(err, rows){ 
+    if (err)
+      {console.log(err);
+        return;
+    } 
+    var idgames = 0; 
+    if (rows.length > 0){ 
+      for (var i =0; i<rows.length;i++ ){ 
+        if (rows[i].idgames > idgames) 
+          idgames = rows[i].idgames; 
       } 
-      var idgames = 0; 
-      if (rows.length > 0){ 
-        for (var i =0; i<rows.length;i++ ){ 
-          if (rows[i].idgames > idgames) 
-            idgames = rows[i].idgames; 
-        } 
-      }
-      connection.query("update games set finishtime=?, winner=? where idgames=?", [req.body.finishtime,req.body.winner, idgames], function(err, rows){ 
-      if (err){ 
-        console.log(err); 
-        return; 
-      } 
-      }); 
+    }
+    
+    connection.query("update games set finishtime=?, winner=? where idgames=?", [req.body.finishtime,req.body.winner, idgames], function(err, rows){ 
+    if (err){ 
+      console.log(err); 
+      return; 
+    } 
     }); 
   }); 
+}); 
 app.listen(8080); 
 console.log('Server started up');
